@@ -44,7 +44,7 @@ public class MatchScoreCalculationService {
         }
     }
 
-    private void updateTieBreakStatus(MatchAppDto matchAppDto) {
+    public void updateTieBreakStatus(MatchAppDto matchAppDto) {
         if (matchAppDto.getScore().getPlayer1Score().getGame() == MatchScoreAppDto.Game.SIX &&
                 matchAppDto.getScore().getPlayer2Score().getGame() == MatchScoreAppDto.Game.SIX) {
             this.isTieBreak = true;
