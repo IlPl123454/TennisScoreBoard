@@ -5,10 +5,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.plenkovii.dao.HibernateMatchDao;
+import org.plenkovii.dao.MatchDao;
 import org.plenkovii.dto.MatchAppDto;
 import org.plenkovii.dto.MatchScoreAppDto;
 import org.plenkovii.dto.MatchViewDto;
 import org.plenkovii.mapper.MatchMapper;
+import org.plenkovii.service.FinishedMatchesPersistenceService;
 import org.plenkovii.service.MatchScoreCalculationService;
 import org.plenkovii.service.OngoingMatchesService;
 import org.plenkovii.validation.WinnerIdValidation;
@@ -21,10 +24,17 @@ import java.util.UUID;
 public class MatchScoreServlet extends HttpServlet {
 
     private OngoingMatchesService ongoingMatchesService;
+    private MatchScoreCalculationService matchScoreCalculationService;
+    private FinishedMatchesPersistenceService finishedMatchesPersistenceService;
+
 
     @Override
     public void init() throws ServletException {
+        super.init();
         ongoingMatchesService = (OngoingMatchesService) getServletContext().getAttribute("ongoingMatchesService");
+        matchScoreCalculationService = new MatchScoreCalculationService();
+        MatchDao matchDao = new HibernateMatchDao();
+        finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(matchDao);
     }
 
     @Override
@@ -33,34 +43,41 @@ public class MatchScoreServlet extends HttpServlet {
 
         MatchAppDto matchAppDto = ongoingMatchesService.getMatch(uuid);
 
-        MatchViewDto matchViewDto = MatchMapper.toMatchViewDto(uuid, matchAppDto);
+        MatchViewDto matchViewDto = MatchMapper.matchAppDtotoMatchViewDto(uuid, matchAppDto);
+
+        MatchScoreAppDto.Set set = matchAppDto.getScore().getPlayer1Score().getSet();
+
+        matchScoreCalculationService.updateIsMatchOver(matchAppDto);
 
         req.setAttribute("match", matchViewDto);
-        req.getRequestDispatcher("matchScore.jsp").forward(req, resp);
+
+        if (matchAppDto.isOver()) {
+            ongoingMatchesService.deleteMatch(uuid);
+            String winnerName = getWinnerName(matchAppDto);
+            req.setAttribute("winnerName", winnerName);
+            req.getRequestDispatcher("matchOverPage.jsp").forward(req, resp);
+        } else {
+            req.getRequestDispatcher("matchScore.jsp").forward(req, resp);
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         UUID uuid = UUID.fromString(req.getParameter("matchUuid"));
-
         String winnerId = req.getParameter("pointWinner");
 
         WinnerIdValidation.validate(winnerId);
 
-        MatchAppDto match = ongoingMatchesService.getMatch(uuid);
+        MatchAppDto matchAppDto = ongoingMatchesService.getMatch(uuid);
 
-        MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService();
+        matchScoreCalculationService.addPointToWinner(matchAppDto, winnerId);
+        matchScoreCalculationService.updateIsMatchOver(matchAppDto);
 
-        matchScoreCalculationService.addPointToWinner(match, winnerId);
-
-        if (isMatchOver(match)) {
-            // Временное решение
-            resp.setContentType("text/html;charset=UTF-8");
-            PrintWriter out = resp.getWriter();
-            out.println(matchOverPage);
-        } else {
-            resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid.toString());
+        if (isMatchOver(matchAppDto)) {
+            finishedMatchesPersistenceService.saveFinishedMatch(matchAppDto, winnerId);
         }
+
+        resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid);
     }
 
     private boolean isMatchOver(MatchAppDto match) {
@@ -68,16 +85,11 @@ public class MatchScoreServlet extends HttpServlet {
                 match.getScore().getPlayer2Score().getSet() == MatchScoreAppDto.Set.TWO;
     }
 
-    private String matchOverPage = "<html>\n" +
-            "<head>\n" +
-            "    <title>Матч окончен</title>\n" +
-            "</head>\n" +
-            "<body>\n" +
-            "<p><strong>Матч окончен, дальнейший функционал в разработке</strong> </p>\n" +
-            "<form action=\"newMatch.jsp\" method=\"get\">\n" +
-            "    <button type=\"submit\">Вернуться к созданию нового матча</button>\n" +
-            "</form>\n" +
-            "<h2></h2>\n" +
-            "</body>\n" +
-            "</html>";
+    private String getWinnerName(MatchAppDto match) {
+        if (match.getScore().getPlayer1Score().getSet() == MatchScoreAppDto.Set.TWO) {
+            return match.getPlayer1().getName();
+        } else {
+            return match.getPlayer2().getName();
+        }
+    }
 }
