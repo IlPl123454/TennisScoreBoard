@@ -7,7 +7,7 @@ import org.plenkovii.util.MatchScoreConverter;
 import java.util.UUID;
 
 public class MatchMapper {
-    public static MatchViewDto toMatchViewDto(UUID uuid, MatchAppDto matchAppDto) {
+    public static MatchViewDto matchAppDtotoMatchViewDto(UUID uuid, MatchAppDto matchAppDto) {
         return new MatchViewDto(
                 uuid,
                 matchAppDto.getScore().isTieBreak(),
