@@ -13,7 +13,7 @@ import java.util.Optional;
 public class HibernateMatchDao implements MatchDao {
     SessionFactory sessionFactory;
 
-    HibernateMatchDao() {
+    public HibernateMatchDao() {
         sessionFactory = HibernateUtil.getSessionFactory();
     }
 
