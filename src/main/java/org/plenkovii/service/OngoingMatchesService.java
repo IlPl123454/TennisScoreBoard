@@ -20,6 +20,10 @@ public class OngoingMatchesService {
         return uuid;
     }
 
+    public void deleteMatch(UUID uuid) {
+        matches.remove(uuid);
+    }
+
     public MatchAppDto getMatch(UUID uuid) {
         return matches.get(uuid);
     }
