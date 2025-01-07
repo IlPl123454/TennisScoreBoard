@@ -15,7 +15,6 @@ public class MatchScoreCalculationService {
         updateBalanceStatus(winnerPlayerScore, looserPlayerScore);
         updateTieBreakStatus(matchAppDto);
 
-
         if (isGameOver(winnerPlayerScore, looserPlayerScore)) {
             setBalance(false);
             addGame(winnerPlayerScore);
@@ -49,6 +48,10 @@ public class MatchScoreCalculationService {
                 matchAppDto.getScore().getPlayer2Score().getGame() == MatchScoreAppDto.Game.SIX) {
             this.isTieBreak = true;
         }
+    }
+
+    public void updateIsMatchOver(MatchAppDto matchAppDto) {
+        matchAppDto.setOver(isMatchOver(matchAppDto));
     }
 
 
