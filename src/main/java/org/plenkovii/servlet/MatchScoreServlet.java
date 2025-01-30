@@ -6,7 +6,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.plenkovii.dao.HibernateMatchDao;
+import org.plenkovii.dao.HibernatePlayerDao;
 import org.plenkovii.dao.MatchDao;
+import org.plenkovii.dao.PlayerDao;
 import org.plenkovii.dto.MatchAppDto;
 import org.plenkovii.dto.MatchScoreAppDto;
 import org.plenkovii.dto.MatchViewDto;
@@ -14,10 +16,10 @@ import org.plenkovii.mapper.MatchMapper;
 import org.plenkovii.service.FinishedMatchesPersistenceService;
 import org.plenkovii.service.MatchScoreCalculationService;
 import org.plenkovii.service.OngoingMatchesService;
+import org.plenkovii.validation.OngoingMatchValidation;
 import org.plenkovii.validation.WinnerIdValidation;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.UUID;
 
 @WebServlet("/match-score")
@@ -27,19 +29,21 @@ public class MatchScoreServlet extends HttpServlet {
     private MatchScoreCalculationService matchScoreCalculationService;
     private FinishedMatchesPersistenceService finishedMatchesPersistenceService;
 
-
     @Override
     public void init() throws ServletException {
         super.init();
+
         ongoingMatchesService = (OngoingMatchesService) getServletContext().getAttribute("ongoingMatchesService");
+        finishedMatchesPersistenceService = (FinishedMatchesPersistenceService) getServletContext()
+                .getAttribute("finishedMatchesPersistenceService");
         matchScoreCalculationService = new MatchScoreCalculationService();
-        MatchDao matchDao = new HibernateMatchDao();
-        finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(matchDao);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
+
+        OngoingMatchValidation.validateUuid(ongoingMatchesService, uuid);
 
         MatchAppDto matchAppDto = ongoingMatchesService.getMatch(uuid);
 
@@ -52,17 +56,17 @@ public class MatchScoreServlet extends HttpServlet {
         req.setAttribute("match", matchViewDto);
 
         if (matchAppDto.isOver()) {
-            ongoingMatchesService.deleteMatch(uuid);
             String winnerName = getWinnerName(matchAppDto);
             req.setAttribute("winnerName", winnerName);
-            req.getRequestDispatcher("matchOverPage.jsp").forward(req, resp);
+            req.getRequestDispatcher("match-over.jsp").forward(req, resp);
+            ongoingMatchesService.deleteMatch(uuid);
         } else {
-            req.getRequestDispatcher("matchScore.jsp").forward(req, resp);
+            req.getRequestDispatcher("match-score.jsp").forward(req, resp);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         UUID uuid = UUID.fromString(req.getParameter("matchUuid"));
         String winnerId = req.getParameter("pointWinner");
 
