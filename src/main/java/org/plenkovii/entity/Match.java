@@ -11,20 +11,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "matches")
+@Table(name = "Matches")
 
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "player1_id")
+    @JoinColumn(name = "Player1_id")
     private Player player1;
     @ManyToOne
-    @JoinColumn(name = "player2_id")
+    @JoinColumn(name = "Player2_id")
     private Player player2;
     @ManyToOne
-    @JoinColumn(name = "winner_id")
+    @JoinColumn(name = "Winner_id")
     private Player winner;
 
     public Match(Player player1, Player player2, Player winner) {
