@@ -1,7 +1,9 @@
 package org.plenkovii.mapper;
 
+import org.plenkovii.dto.FinishedMatchDto;
 import org.plenkovii.dto.MatchAppDto;
 import org.plenkovii.dto.MatchViewDto;
+import org.plenkovii.entity.Match;
 import org.plenkovii.util.MatchScoreConverter;
 
 import java.util.UUID;
@@ -22,5 +24,9 @@ public class MatchMapper {
                 MatchScoreConverter.getTieBreakScore(matchAppDto.getScore().getPlayer1Score().getTieBreakPoint()),
                 MatchScoreConverter.getTieBreakScore(matchAppDto.getScore().getPlayer2Score().getTieBreakPoint())
         );
+    }
+
+    public static FinishedMatchDto MatchEntityToFinishedMatchDto(Match match) {
+        return new FinishedMatchDto(match.getPlayer1().getName(), match.getPlayer2().getName(), match.getWinner().getName());
     }
 }
