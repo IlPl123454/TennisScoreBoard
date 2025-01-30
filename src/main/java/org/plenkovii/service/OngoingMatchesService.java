@@ -13,9 +13,9 @@ public class OngoingMatchesService {
         this.matches = ongoingMatches;
     }
 
-    public UUID saveNewMatch(Player player1, Player player2) {
+    public UUID saveNewMatch(String player1Name, String player2Name) {
         UUID uuid = UUID.randomUUID();
-        MatchAppDto match = new MatchAppDto(player1, player2);
+        MatchAppDto match = new MatchAppDto(new Player(player1Name), new Player(player2Name));
         matches.put(uuid, match);
         return uuid;
     }
