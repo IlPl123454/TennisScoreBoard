@@ -1,0 +1,260 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+
+    font-family: ISOCPEUR, sans-serif;
+    line-height: 1.6;
+    color: #333;
+
+    background-image: url('../images/img.png');
+    background-size: cover; /* Масштабирование картинки, чтобы она заполнила экран */
+    background-position: top; /* Центрируем картинку */
+    background-repeat: no-repeat; /* Отключаем повтор картинки */
+    background-color: rgba(255, 255, 255, 0.4); /* Белый цвет с прозрачностью */
+    background-blend-mode: overlay; /* Смешивание фона с цветом */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header nav a {
+    font-size: 20px;
+    font-weight: 500;
+    color: #000;
+    text-decoration: none;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    flex-direction: column;
+}
+
+button {
+    font-family: ISOCPEUR, sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: rgb(148, 195, 221);
+    color: #000;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 1px 20px;
+}
+
+.input-group label {
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+.input-group input {
+    font-family: ISOCPEUR, sans-serif;
+    font-size: 18px;
+    padding: 0.3rem;
+    border: 1px solid #474747;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.score-table {
+    display: flex; /* Включаем Flexbox */
+    justify-content: center; /* Центрируем по горизонтали */
+    align-items: center; /* Центрируем по вертикали */
+    height: 100vh; /* Высота контейнера равна высоте окна браузера */
+}
+
+.score-table table {
+    width: 60%; /* Задайте ширину таблицы */
+    border-collapse: collapse;
+}
+
+.score-table th {
+    padding: 8px;
+    text-align: left;
+    background-color: #f4f4f4;
+    font-weight: bold;
+    border: 1px solid #000;
+    font-size: 14px;
+}
+
+.score-table td {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(244, 244, 244, 0.6);
+    border: 1px solid #000;
+}
+
+.final-score h2 {
+    text-align: center; /* Центрирование текста */
+    margin-bottom: 5px; /* Отступ между заголовком и таблицей */
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.final-score-table {
+    margin: 0 auto; /* Центрирование таблицы */
+    border-collapse: collapse;
+    width: 80%; /* Ограничение ширины таблицы */
+    max-width: 600px;
+}
+
+.final-score-table td {
+    padding: 5px;
+    border: 1px solid #ddd;
+    font-size: 18px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.final-score-table .player-name {
+    text-align: left;
+}
+
+.final-score-table .player-score {
+    text-align: right;
+}
+
+
+.matches-table table {
+    width: 80%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.matches-table th {
+    padding: 8px;
+    text-align: left;
+    background-color: #f4f4f4;
+    font-weight: bold;
+    border: 1px solid #000;
+    font-size: 14px;
+}
+
+.matches-table td {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px;
+    text-align: center;
+    background-color: rgba(244, 244, 244, 0.6);
+    border: 1px solid #000;
+}
+
+.matches-table td.winner-name {
+    font-weight: bold;
+}
+
+.search-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.search-section label {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Расстояние между текстом, полем ввода и кнопкой */
+}
+
+.search-section input {
+    padding: 5px;
+    font-size: 16px;
+}
+
+.search-section button {
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: nowrap;
+}
+
+.pagination form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pagination button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #dfe6e9;
+}
+
+.pagination .current-page {
+    font-weight: bold;
+    background-color: #dfe6e9;
+}
+
+.exceptions {
+    align-items: flex-start;
+    text-align: center;
+}
+
+

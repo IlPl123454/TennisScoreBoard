@@ -1,0 +1,14 @@
+CREATE  TABLE Players (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE Matches (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Player1_id INT NOT NULL,
+    Player2_id INT NOT NULL,
+    Winner_id INT NOT NULL,
+    FOREIGN KEY (Player1_id) REFERENCES Players(ID),
+    FOREIGN KEY (Player2_id) REFERENCES Players(ID),
+    FOREIGN KEY (Winner_id) REFERENCES Players(ID)
+);

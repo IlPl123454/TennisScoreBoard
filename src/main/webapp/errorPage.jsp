@@ -5,10 +5,12 @@
     <title>Error</title>
 </head>
 <body>
-<p><strong>Ошибка:</strong> ${errorMessage}</p>
-<form action="newMatch.jsp" method="get">
-    <button type="submit">Вернуться к созданию нового матча</button>
-</form>
-<h2></h2>
+<jsp:include page="header.jsp"/>
+<div class="exceptions">
+    <h3>Ошибка: ${errorMessage}</h3>
+    <form action="new-match.jsp" method="get">
+        <button type="submit">Вернуться к созданию нового матча</button>
+    </form>
+</div>
 </body>
 </html>

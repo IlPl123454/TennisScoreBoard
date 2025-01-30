@@ -6,18 +6,29 @@
     <title>Матч окончен</title>
 </head>
 <body>
-<p>Матч окончен, итоговый счет:</p>
+<jsp:include page="header.jsp"/>
+<div class="final-score">
+    <h2>Матч окончен, итоговый счет:</h2>
 
-<table>
-    <tr>
-        <td>${match.player1Name}</td>
-        <td>${match.player1Sets}</td>
-    </tr>
-    <tr>
-        <td>${match.player2Name}</td>
-        <td>${match.player2Sets}</td>
-    </tr>
-</table>
-<p>Поздравляем с победой, ${winnerName}!</p>
+    <table class="final-score-table">
+        <thead>
+        <tr>
+            <th class="player-name">Имя игрока</th>
+            <th class="player-score">Выигранноые сеты</th>
+        </tr>
+
+        </thead>
+        <tr>
+            <td class="player-name">${match.player1Name}</td>
+            <td class="player-score">${match.player1Sets}</td>
+        </tr>
+        <tr>
+            <td class="player-name">${match.player2Name}</td>
+            <td class="player-score">${match.player2Sets}</td>
+        </tr>
+    </table>
+
+    <h2>Поздравляем с победой, ${winnerName}!</h2>
+</div>
 </body>
 </html>
