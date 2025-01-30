@@ -12,7 +12,6 @@ public class ExceptionHandler implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
