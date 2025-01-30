@@ -91,8 +91,38 @@ public class HibernateMatchDao implements MatchDao {
     @Override
     public List<Match> findByPlayerName(String name) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Match where player1.name = :name OR player2.name = :name", Match.class)
-                    .setParameter("name", name).list();
+            return session.createQuery(
+                            "from Match where player1.name LIKE :name OR player2.name LIKE :name", Match.class)
+                    .setParameter("name", "%" + name + "%").list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DatabaseException("Возникла ошибка при работе с базой данных");
+        }
+    }
+
+    @Override
+    public List<Match> findAllWithPagination(int page, int pageSize) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Match", Match.class)
+                    .setFirstResult((page - 1) * pageSize)
+                    .setMaxResults(pageSize)
+                    .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DatabaseException("Возникла ошибка при работе с базой данных");
+        }
+    }
+
+
+    @Override
+    public List<Match> findByPlayerNameWithPagination(String name,int page, int pageSize) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(
+                            "from Match where player1.name LIKE :name OR player2.name LIKE :name", Match.class)
+                    .setParameter("name", "%" + name + "%")
+                    .setFirstResult((page - 1) * pageSize)
+                    .setMaxResults(pageSize)
+                    .list();
         } catch (Exception e) {
             e.printStackTrace();
             throw new DatabaseException("Возникла ошибка при работе с базой данных");
