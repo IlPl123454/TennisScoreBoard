@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "players", indexes = {
+@Table(name = "Players", indexes = {
         @Index(name = "idx_name", columnList = "name", unique = true)
 })
 public class Player {
@@ -25,3 +25,7 @@ public class Player {
         this.name = name;
     }
 }
+
+
+
+
