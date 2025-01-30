@@ -81,6 +81,18 @@ public class HibernatePlayerDao implements PlayerDao {
     }
 
     @Override
+    public Player saveIfNotExists(Player player) {
+        Optional<Player> playerOptional = findByName(player.getName());
+
+        if (playerOptional.isPresent()) {
+            return playerOptional.get();
+        } else {
+            return save(player);
+        }
+
+    }
+
+    @Override
     public void update(Player entity) {
         Transaction transaction = null;
         try (Session session = sessionFactory.getCurrentSession()) {
